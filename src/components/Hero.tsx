@@ -16,8 +16,8 @@ export const Hero: React.FC = () => {
       id="home"
       className="relative min-h-[92vh] flex items-center justify-center pt-24 pb-16 overflow-hidden"
     >
-      {/* Spider-Man Inspired Web Pattern - Upper Right Corner */}
-      <SpiderWeb className="z-0" />
+      {/* Spider-Man Inspired Web Pattern with Hanging Spider - Upper Right Corner */}
+      <SpiderWeb className="z-20" />
 
       {/* Subtle Tactical Grid Background */}
       <div className="absolute inset-0 pointer-events-none bg-grid-pattern-light dark:bg-grid-pattern opacity-60 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_45%,#000_70%,transparent_100%)]" />
