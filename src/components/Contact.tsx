@@ -1,164 +1,352 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Mail, MapPin, Phone, Send, CheckCircle2 } from 'lucide-react';
-import { SOCIALS } from '../data';
+import { Mail, Phone, MapPin, Send, CheckCircle2, Copy, Check, AlertCircle, Radio } from 'lucide-react';
+import confetti from 'canvas-confetti';
+import { personalInfo } from '../data/portfolioData';
+import { SectionHeader, TacticalCornerBracket, TacticalBadge } from './TacticalUI';
+import { GithubIcon, LinkedinIcon } from './Icons';
 
-export function Contact() {
-  const [showToast, setShowToast] = useState(false);
+export const Contact: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  const handleCopy = (text: string, fieldName: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(fieldName);
+    setTimeout(() => setCopiedField(null), 2500);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (formStatus === 'error') {
+      setFormStatus('idle');
+      setErrorMessage('');
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate sending message
-    setShowToast(true);
-    const form = e.currentTarget;
-    form.reset();
-    
+
+    // Validation
+    if (!formData.name.trim()) {
+      setFormStatus('error');
+      setErrorMessage('Please enter your name.');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email.trim())) {
+      setFormStatus('error');
+      setErrorMessage('Please enter a valid email address.');
+      return;
+    }
+
+    if (!formData.message.trim() || formData.message.trim().length < 10) {
+      setFormStatus('error');
+      setErrorMessage('Message must be at least 10 characters long.');
+      return;
+    }
+
+    setFormStatus('submitting');
+
+    // Simulate reliable dispatch
     setTimeout(() => {
-      setShowToast(false);
-    }, 4000);
+      setFormStatus('success');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+
+      // Trigger celebration confetti
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 60,
+          origin: { y: 0.8 },
+          colors: ['#f59e0b', '#06b6d4', '#10b981'],
+        });
+      } catch (err) {
+        // Silently ignore if canvas not supported
+      }
+    }, 1200);
   };
 
   return (
-    <section id="contact" className="py-16 sm:py-24 relative bg-slate-100/50 dark:bg-slate-900/50">
+    <section id="contact" className="py-20 sm:py-28 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center mb-12 sm:mb-16 text-center">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4"
-          >
-            Get in <span className="gradient-text">Touch</span>
-          </motion.h2>
-          <motion.div 
-            initial={{ opacity: 0, width: 0 }}
-            whileInView={{ opacity: 1, width: "60px" }}
-            viewport={{ once: true }}
-            className="h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"
-          />
-        </div>
+        <SectionHeader
+          tag="COMMUNICATION_LINK // 05"
+          title="Get In Touch"
+          subtitle="Have an opportunity, internship, project idea, or simply want to connect? Transmission lines are open."
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12">
-          {/* Contact Info */}
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="md:col-span-2 space-y-4 sm:space-y-6"
-          >
-            <div className="glass-card p-4 sm:p-6 rounded-2xl flex items-start gap-3.5 sm:gap-4">
-              <div className="p-2.5 sm:p-3 rounded-xl bg-blue-500/10 text-blue-400 shrink-0">
-                <Mail className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <div className="overflow-hidden">
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-0.5 sm:mb-1 text-sm sm:text-base">Email</h3>
-                <a href={`mailto:${SOCIALS.email}`} className="text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-white transition-colors text-xs sm:text-sm break-all">
-                  {SOCIALS.email}
-                </a>
-              </div>
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Column: Direct Channels & Information */}
+          <div className="lg:col-span-5 flex flex-col gap-6">
+            <div className="p-6 sm:p-8 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-md relative">
+              <TacticalCornerBracket position="tl" />
+              <TacticalCornerBracket position="br" />
 
-            <div className="glass-card p-4 sm:p-6 rounded-2xl flex items-start gap-3.5 sm:gap-4">
-              <div className="p-2.5 sm:p-3 rounded-xl bg-purple-500/10 text-purple-400 shrink-0">
-                <Phone className="w-5 h-5 sm:w-6 sm:h-6" />
+              <div className="flex items-center gap-2 mb-4">
+                <TacticalBadge variant="amber">
+                  <Radio className="w-3.5 h-3.5 animate-pulse" />
+                  <span>TRANSMISSION_STATION</span>
+                </TacticalBadge>
               </div>
-              <div>
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-0.5 sm:mb-1 text-sm sm:text-base">Phone</h3>
-                <a href={`tel:${SOCIALS.phone.replace(/\s+/g, '')}`} className="text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-white transition-colors text-xs sm:text-sm">
-                  {SOCIALS.phone}
-                </a>
-              </div>
-            </div>
 
-            <div className="glass-card p-4 sm:p-6 rounded-2xl flex items-start gap-3.5 sm:gap-4">
-              <div className="p-2.5 sm:p-3 rounded-xl bg-blue-500/10 text-blue-400 shrink-0">
-                <MapPin className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-0.5 sm:mb-1 text-sm sm:text-base">Location</h3>
-                <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm">
-                  {SOCIALS.location}
-                </p>
-              </div>
-            </div>
-          </motion.div>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight mb-2">
+                Let's Build Something Great Together
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+                I am actively seeking software engineering internships, frontend developer roles, and collaborative projects. Feel free to reach out directly via email or connect on LinkedIn.
+              </p>
 
-          {/* Contact Form */}
-          <motion.div 
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="md:col-span-3"
-          >
-            <form 
-              className="glass-card p-5 sm:p-8 rounded-3xl"
-              onSubmit={handleSubmit}
-            >
-              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-4 sm:mb-6">Send me a message</h3>
-              
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label htmlFor="name" className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">Name</label>
-                    <input 
-                      type="text" 
-                      id="name" 
-                      required
-                      className="w-full bg-white/50 dark:bg-slate-950/50 border border-slate-300 dark:border-white/10 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-slate-900 dark:text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-base"
-                      placeholder="Your Name"
-                    />
+              {/* Direct Info Cards */}
+              <div className="space-y-3 font-mono text-xs">
+                {/* Email Item */}
+                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-between gap-3 group">
+                  <div className="flex items-center gap-3 overflow-hidden">
+                    <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500 shrink-0">
+                      <Mail className="w-4 h-4" />
+                    </div>
+                    <div className="truncate">
+                      <span className="text-[10px] text-slate-400 block uppercase">PRIMARY_EMAIL</span>
+                      <a
+                        href={`mailto:${personalInfo.email}`}
+                        className="text-slate-800 dark:text-slate-200 hover:text-amber-500 dark:hover:text-cyan-400 transition-colors truncate block font-sans text-sm font-medium"
+                      >
+                        {personalInfo.email}
+                      </a>
+                    </div>
                   </div>
-                  <div className="space-y-1.5">
-                    <label htmlFor="email" className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">Email</label>
-                    <input 
-                      type="email" 
-                      id="email" 
-                      required
-                      className="w-full bg-white/50 dark:bg-slate-950/50 border border-slate-300 dark:border-white/10 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-slate-900 dark:text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-base"
-                      placeholder="your.email@example.com"
-                    />
-                  </div>
-                </div>
-                
-                <div className="space-y-1.5">
-                  <label htmlFor="message" className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">Message</label>
-                  <textarea 
-                    id="message" 
-                    required
-                    rows={4}
-                    className="w-full bg-white/50 dark:bg-slate-950/50 border border-slate-300 dark:border-white/10 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-slate-900 dark:text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none text-base"
-                    placeholder="Hello Avinash, I'd like to discuss..."
-                  />
+
+                  <button
+                    onClick={() => handleCopy(personalInfo.email, 'email')}
+                    className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:text-amber-500 transition-colors shrink-0"
+                    title="Copy Email"
+                    aria-label="Copy email address"
+                  >
+                    {copiedField === 'email' ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                  </button>
                 </div>
 
-                <button 
-                  type="submit"
-                  className="w-full py-3.5 sm:py-4 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-98 text-white font-semibold transition-colors flex items-center justify-center gap-2 mt-2"
-                >
-                  <Send className="w-4 h-4" />
-                  Send Message
-                </button>
+                {/* Phone Item */}
+                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-between gap-3 group">
+                  <div className="flex items-center gap-3 overflow-hidden">
+                    <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-500 shrink-0">
+                      <Phone className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-400 block uppercase">PHONE / WHATSAPP</span>
+                      <a
+                        href={`tel:${personalInfo.phone.replace(/\s+/g, '')}`}
+                        className="text-slate-800 dark:text-slate-200 hover:text-cyan-400 transition-colors font-sans text-sm font-medium"
+                      >
+                        {personalInfo.phone}
+                      </a>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => handleCopy(personalInfo.phone, 'phone')}
+                    className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:text-cyan-400 transition-colors shrink-0"
+                    title="Copy Phone Number"
+                    aria-label="Copy phone number"
+                  >
+                    {copiedField === 'phone' ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                  </button>
+                </div>
+
+                {/* Location Item */}
+                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500 shrink-0">
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-400 block uppercase">CURRENT_LOCATION</span>
+                    <span className="text-slate-800 dark:text-slate-200 font-sans text-sm font-medium">
+                      {personalInfo.location}
+                    </span>
+                  </div>
+                </div>
               </div>
-            </form>
-          </motion.div>
+
+              {/* Social Channels Links */}
+              <div className="mt-6 pt-5 border-t border-slate-200/60 dark:border-white/10 flex items-center justify-between">
+                <span className="text-xs font-mono text-slate-500 dark:text-slate-400 uppercase tracking-widest">
+                  SOCIAL_NETWORKS:
+                </span>
+                <div className="flex items-center gap-2">
+                  <a
+                    href={personalInfo.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-xs font-mono text-slate-700 dark:text-slate-300 hover:text-amber-500 hover:border-amber-500/50 transition-colors"
+                  >
+                    <GithubIcon className="w-3.5 h-3.5" />
+                    <span>GitHub</span>
+                  </a>
+                  <a
+                    href={personalInfo.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-xs font-mono text-slate-700 dark:text-slate-300 hover:text-cyan-400 hover:border-cyan-400/50 transition-colors"
+                  >
+                    <LinkedinIcon className="w-3.5 h-3.5" />
+                    <span>LinkedIn</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Accessible Contact Form */}
+          <div className="lg:col-span-7">
+            <div className="p-6 sm:p-8 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-md relative">
+              <TacticalCornerBracket position="tl" />
+              <TacticalCornerBracket position="tr" />
+              <TacticalCornerBracket position="bl" />
+              <TacticalCornerBracket position="br" />
+
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 dark:text-slate-400 block">
+                    TRANSMISSION_INPUT // V2
+                  </span>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
+                    Send a Direct Message
+                  </h3>
+                </div>
+                <TacticalBadge variant="cyan">ENCRYPTED // TLS</TacticalBadge>
+              </div>
+
+              {formStatus === 'success' ? (
+                <div className="p-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-center animate-fade-in">
+                  <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle2 className="w-6 h-6" />
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                    Message Dispatched Successfully!
+                  </h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto mb-6 leading-relaxed">
+                    Thank you for reaching out. Your transmission has been recorded, and I will get back to you as soon as possible.
+                  </p>
+                  <button
+                    onClick={() => setFormStatus('idle')}
+                    className="px-5 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold"
+                  >
+                    Send Another Message
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {formStatus === 'error' && (
+                    <div className="p-3.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs font-mono flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      <span>{errorMessage}</span>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Name Input */}
+                    <div>
+                      <label htmlFor="name" className="block text-xs font-mono text-slate-600 dark:text-slate-400 mb-1.5 uppercase">
+                        Your Name *
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        required
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        placeholder="e.g. Alex Morgan"
+                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-white dark:bg-slate-800/80 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500 dark:focus:border-cyan-400 transition-colors"
+                      />
+                    </div>
+
+                    {/* Email Input */}
+                    <div>
+                      <label htmlFor="email" className="block text-xs font-mono text-slate-600 dark:text-slate-400 mb-1.5 uppercase">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder="alex@domain.com"
+                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-white dark:bg-slate-800/80 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500 dark:focus:border-cyan-400 transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Subject Input */}
+                  <div>
+                    <label htmlFor="subject" className="block text-xs font-mono text-slate-600 dark:text-slate-400 mb-1.5 uppercase">
+                      Subject / Topic
+                    </label>
+                    <input
+                      type="text"
+                      id="subject"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      placeholder="e.g. Internship Opportunity / Project Collaboration"
+                      className="w-full px-4 py-2.5 rounded-lg text-sm bg-white dark:bg-slate-800/80 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500 dark:focus:border-cyan-400 transition-colors"
+                    />
+                  </div>
+
+                  {/* Message Input */}
+                  <div>
+                    <label htmlFor="message" className="block text-xs font-mono text-slate-600 dark:text-slate-400 mb-1.5 uppercase">
+                      Message Content *
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      required
+                      rows={4}
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      placeholder="Write your message here..."
+                      className="w-full px-4 py-2.5 rounded-lg text-sm bg-white dark:bg-slate-800/80 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500 dark:focus:border-cyan-400 transition-colors resize-none"
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      disabled={formStatus === 'submitting'}
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-xs font-mono uppercase tracking-wider font-bold bg-slate-900 text-white hover:bg-slate-800 dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-slate-950 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                    >
+                      {formStatus === 'submitting' ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                          <span>ENCRYPTING & DISPATCHING...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          <span>TRANSMIT MESSAGE</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
         </div>
       </div>
-      <AnimatePresence>
-        {showToast && (
-          <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-5 py-3.5 rounded-full shadow-2xl border border-slate-200 dark:border-white/10 max-w-[90vw]"
-          >
-            <div className="bg-green-500/10 text-green-500 rounded-full p-1 shrink-0">
-              <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
-            </div>
-            <span className="font-medium text-xs sm:text-sm">Message sent successfully!</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
-}
+};

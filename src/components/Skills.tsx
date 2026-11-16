@@ -1,72 +1,131 @@
-import { motion } from 'motion/react';
-import { SKILLS } from '../data';
-import { cn } from '../lib/utils';
+import React, { useState } from 'react';
+import { Layout, Code2, Database, Wrench, Cpu, Check, Terminal } from 'lucide-react';
+import { skillCategories } from '../data/portfolioData';
+import { SectionHeader, TacticalCornerBracket } from './TacticalUI';
 
-export function Skills() {
+export const Skills: React.FC = () => {
+  const [activeCategory, setActiveCategory] = useState<string>('all');
+
+  const getCategoryIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'Layout':
+        return <Layout className="w-5 h-5 text-amber-500" />;
+      case 'Code2':
+        return <Code2 className="w-5 h-5 text-cyan-400" />;
+      case 'Database':
+        return <Database className="w-5 h-5 text-emerald-400" />;
+      case 'Wrench':
+        return <Wrench className="w-5 h-5 text-purple-400" />;
+      case 'Cpu':
+        return <Cpu className="w-5 h-5 text-rose-400" />;
+      default:
+        return <Terminal className="w-5 h-5 text-amber-400" />;
+    }
+  };
+
+  const displayedCategories = activeCategory === 'all'
+    ? skillCategories
+    : skillCategories.filter((c) => c.title === activeCategory);
+
   return (
-    <section id="skills" className="py-16 sm:py-24 relative bg-slate-100/50 dark:bg-slate-900/50">
+    <section id="skills" className="py-20 sm:py-28 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center mb-12 sm:mb-16 text-center">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4"
+        <SectionHeader
+          tag="ARSENAL // 03"
+          title="Skills & Technical Capabilities"
+          subtitle="A comprehensive toolkit across web engineering, programming languages, database architecture, and machine intelligence."
+        />
+
+        {/* Category Tabs */}
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
+          <button
+            onClick={() => setActiveCategory('all')}
+            className={`px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wider transition-all duration-200 border ${
+              activeCategory === 'all'
+                ? 'bg-slate-900 text-white dark:bg-cyan-500 dark:text-slate-950 font-bold border-transparent shadow-sm'
+                : 'bg-white/60 dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-white/10 hover:border-cyan-400/50'
+            }`}
           >
-            Technical <span className="gradient-text">Skills</span>
-          </motion.h2>
-          <motion.div 
-            initial={{ opacity: 0, width: 0 }}
-            whileInView={{ opacity: 1, width: "60px" }}
-            viewport={{ once: true }}
-            className="h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"
-          />
+            All Categories
+          </button>
+          {skillCategories.map((cat) => (
+            <button
+              key={cat.title}
+              onClick={() => setActiveCategory(cat.title)}
+              className={`px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wider transition-all duration-200 border ${
+                activeCategory === cat.title
+                  ? 'bg-slate-900 text-white dark:bg-cyan-500 dark:text-slate-950 font-bold border-transparent shadow-sm'
+                  : 'bg-white/60 dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-white/10 hover:border-cyan-400/50'
+              }`}
+            >
+              {cat.title}
+            </button>
+          ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {SKILLS.map((category, index) => {
-            const Icon = category.icon;
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glass-card p-5 sm:p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between group transition-transform duration-300"
-              >
-                {/* Top Colored Accent Bar */}
-                <div className={cn('h-1 w-full absolute top-0 left-0 bg-gradient-to-r', category.gradient)} />
+        {/* Skills Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {displayedCategories.map((cat) => (
+            <div
+              key={cat.title}
+              className="group relative flex flex-col justify-between p-6 sm:p-7 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-md transition-all duration-300 hover:border-amber-500/40 dark:hover:border-cyan-400/40 hover:-translate-y-1 shadow-sm"
+            >
+              <TacticalCornerBracket position="tl" />
+              <TacticalCornerBracket position="br" />
 
-                <div>
-                  <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6 pt-1 sm:pt-2">
-                    <div className={cn('p-2.5 sm:p-3 rounded-xl flex items-center justify-center shadow-sm shrink-0', category.iconBg)}>
-                      <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+              <div>
+                {/* Category Header */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                      {getCategoryIcon(cat.icon)}
                     </div>
-                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-                      {category.category}
-                    </h3>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 sm:gap-2.5">
-                    {category.skills.map((skill, sIdx) => (
-                      <span 
-                        key={sIdx}
-                        className={cn(
-                          'px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg text-xs sm:text-sm font-semibold border transition-all duration-200 cursor-default shadow-xs',
-                          category.tagClass
-                        )}
-                      >
-                        {skill}
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+                        {cat.title}
+                      </h3>
+                      <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-widest">
+                        {cat.code}
                       </span>
-                    ))}
+                    </div>
                   </div>
                 </div>
-              </motion.div>
-            );
-          })}
+
+                <p className="text-xs text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                  {cat.description}
+                </p>
+
+                {/* Skills Badges */}
+                <div className="flex flex-wrap gap-2">
+                  {cat.skills.map((skill) => (
+                    <div
+                      key={skill.name}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-mono transition-all duration-200 ${
+                        skill.popular
+                          ? 'bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/30 hover:border-amber-500/60'
+                          : 'bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 hover:border-cyan-400/40'
+                      }`}
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70" />
+                      <span>{skill.name}</span>
+                      {skill.level && (
+                        <span className="text-[10px] opacity-60 ml-0.5">({skill.level})</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tactical card bottom indicator */}
+              <div className="mt-6 pt-4 border-t border-slate-200/60 dark:border-white/5 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span>{cat.skills.length} competencies</span>
+                <span className="group-hover:text-cyan-400 transition-colors">READY</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
-}
+};
+

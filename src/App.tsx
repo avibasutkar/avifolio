@@ -1,61 +1,49 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
-import { useState } from 'react';
-import { ThemeProvider } from './components/ThemeProvider';
-import { SidebarNav } from './components/SidebarNav';
-import { ScrollProgress } from './components/ScrollProgress';
-import { ScrollToTop } from './components/ScrollToTop';
-import { CustomCursor } from './components/CustomCursor';
-import { SectionDivider } from './components/SectionDivider';
+import React, { useEffect } from 'react';
+import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
-import { Skills } from './components/Skills';
-import { Experience } from './components/Experience';
 import { Projects } from './components/Projects';
-import { Certifications } from './components/Certifications';
-import { Education } from './components/Education';
-import { ResumeCTA } from './components/ResumeCTA';
+import { Skills } from './components/Skills';
+import { ExperienceAndEducation } from './components/ExperienceAndEducation';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
-import { cn } from './lib/utils';
+import { JarvisCursor } from './components/JarvisCursor';
 
-export default function App() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
+export const App: React.FC = () => {
   return (
-    <ThemeProvider defaultTheme="dark">
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50 font-sans selection:bg-blue-500/30 selection:text-white transition-colors duration-300">
-        <ScrollProgress />
-        <SidebarNav isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-        <ScrollToTop />
-        <CustomCursor />
+    <div className="relative min-h-screen text-slate-900 dark:text-slate-100 selection:bg-amber-500/20 selection:text-amber-500 dark:selection:bg-cyan-500/25 dark:selection:text-cyan-300">
+      {/* JARVIS Tactical Reticle Cursor for desktop */}
+      <JarvisCursor />
 
-        <div className={cn('transition-all duration-300 pt-16 lg:pt-0', isCollapsed ? 'lg:pl-20' : 'lg:pl-72')}>
-          <main>
-            <Hero />
-            <SectionDivider />
-            <About />
-            <SectionDivider />
-            <Skills />
-            <SectionDivider />
-            <Experience />
-            <SectionDivider />
-            <Projects />
-            <SectionDivider />
-            <Certifications />
-            <SectionDivider />
-            <Education />
-            <SectionDivider />
-            <ResumeCTA />
-            <SectionDivider />
-            <Contact />
-          </main>
-          <Footer />
-        </div>
-      </div>
-    </ThemeProvider>
+      {/* Main Navigation Bar */}
+      <Navbar />
+
+      {/* Main Content Flow */}
+      <main id="main-content" className="relative z-10 flex flex-col">
+        {/* Section 0: Hero with Spider-Man Web & BGMI Tactical Accents */}
+        <Hero />
+
+        {/* Section 1: About Me & Engineering Philosophy */}
+        <About />
+
+        {/* Section 2: Projects Showcase with Filterable Tabs */}
+        <Projects />
+
+        {/* Section 3: Skills & Technical Capabilities */}
+        <Skills />
+
+        {/* Section 4: Experience, Education & Certifications */}
+        <ExperienceAndEducation />
+
+        {/* Section 5: Accessible Contact Form & Direct Channels */}
+        <Contact />
+      </main>
+
+      {/* Footer with Tactical Telemetry and Status Clock */}
+      <Footer />
+    </div>
   );
-}
+};
+
+export default App;
+

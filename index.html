@@ -1,19 +1,36 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-    <title>Avinash Basutkar | Data Analyst | Data Scientist</title>
-    <meta name="description" content="Portfolio of Avinash Basutkar — Data Analyst and Data Scientist specializing in Python, SQL, Power BI, Machine Learning, AI, and Data Analytics." />
-    <meta property="og:title" content="Avinash Basutkar | Data Analyst | Data Scientist" />
-    <meta property="og:description" content="Portfolio of Avinash Basutkar — Data Analyst and Data Scientist specializing in Python, SQL, Power BI, Machine Learning, AI, and Data Analytics." />
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+    <title>Avinash Basutkar | Computer Science & Web Developer Portfolio</title>
+    <meta name="description" content="Portfolio of Avinash Basutkar — Computer Science & Engineering Student and Aspiring Web Developer building modern web applications, AI tools, and intelligent systems." />
+    
+    <!-- Open Graph / Meta -->
     <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:title" content="Avinash Basutkar | Computer Science & Web Developer" />
+    <meta property="og:description" content="Modern, minimalist, BGMI tactical & JARVIS inspired portfolio of Avinash Basutkar." />
+    <meta property="og:image" content="/images/profile.jpg" />
+    
+    <!-- Inline script to prevent theme flash -->
+    <script>
+      (function() {
+        const storedTheme = localStorage.getItem('avi_portfolio_theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (storedTheme === 'dark' || (!storedTheme && systemPrefersDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
   </head>
-  <body>
+  <body class="bg-slate-50 text-slate-900 dark:bg-[#080c14] dark:text-slate-100 font-sans selection:bg-amber-500/20 selection:text-amber-500 dark:selection:bg-cyan-500/25 dark:selection:text-cyan-300 antialiased overflow-x-hidden min-h-screen transition-colors duration-300">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
