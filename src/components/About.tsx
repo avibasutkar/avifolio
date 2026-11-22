@@ -1,5 +1,5 @@
 import React from 'react';
-import { Code, BrainCircuit, Rocket, CheckCircle2, Award, BookOpen, MapPin, Sparkles } from 'lucide-react';
+import { Code, BrainCircuit, Rocket, CheckCircle2, Award, BookOpen, MapPin, Sparkles, BarChart3, Languages } from 'lucide-react';
 import { personalInfo, educationData } from '../data/portfolioData';
 import { SectionHeader, TacticalCornerBracket, TacticalBadge } from './TacticalUI';
 
@@ -10,7 +10,7 @@ export const About: React.FC = () => {
         <SectionHeader
           tag="DOSSIER // 01"
           title="About Me"
-          subtitle="A disciplined approach to engineering modern web interfaces and intelligent software solutions."
+          subtitle="A disciplined approach to data science, predictive modeling, business intelligence, and intelligent software engineering."
         />
 
         {/* Stats Grid */}
@@ -53,28 +53,42 @@ export const About: React.FC = () => {
               </div>
 
               <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight mb-4">
-                Passionate Developer Crafting Fast, Accessible & Purposeful Code
+                Data Scientist & Analyst Turning Raw Data Into Usable Insights
               </h3>
 
               <div className="space-y-4 text-base text-slate-600 dark:text-slate-300 leading-relaxed">
                 <p>
-                  I'm currently pursuing my Bachelor of Engineering in Computer Science and Engineering
-                  at <strong className="text-slate-900 dark:text-white font-semibold">{educationData.institution}</strong> in Bangalore,
-                  maintaining a solid <span className="text-amber-600 dark:text-amber-400 font-semibold font-mono">8.1 CGPA</span>.
+                  I'm a Computer Science and Engineering graduate from{' '}
+                  <strong className="text-slate-900 dark:text-white font-semibold">{educationData.institution}</strong>, Bangalore,
+                  graduating with a <span className="text-amber-600 dark:text-amber-400 font-semibold font-mono">{educationData.cgpa} CGPA</span>.
                 </p>
                 <p>
-                  My engineering journey began with a curiosity about how software shapes daily interactions.
-                  Over time, that curiosity evolved into a focused dedication towards building scalable web applications,
-                  interactive frontends with React and TypeScript, and integrating cutting-edge AI models
-                  to solve real problems.
+                  My engineering journey combines rigorous analytical inquiry with practical software engineering.
+                  I have designed and built five independent projects spanning exploratory data analysis, predictive modeling,
+                  explainable AI (SHAP), computer vision, and NLP — complete with full-stack interfaces in React, TypeScript, and Streamlit.
                 </p>
                 <p>
-                  Through hands-on internships at <strong className="text-slate-900 dark:text-white">Qspiders</strong> and{' '}
-                  <strong className="text-slate-900 dark:text-white">NoveTech</strong>, I gained real-world exposure to ETL data pipelines,
-                  exploratory data analysis, interactive dashboard development, and cross-functional team workflows.
-                  Whether writing performant React components or tuning machine learning models, I strive for clean architecture,
-                  responsive design, and exceptional end-user satisfaction.
+                  Through hands-on experience as a Data Science Intern at{' '}
+                  <strong className="text-slate-900 dark:text-white">Qspiders, Bangalore</strong>, I tackled real-world data preprocessing,
+                  cleaned complex datasets using Python and SQL, and engineered interactive Power BI dashboards to drive actionable business decisions.
+                  I am eager to contribute in Data Scientist, Data Analyst, and Python Developer roles.
                 </p>
+              </div>
+
+              {/* Languages Spoken */}
+              <div className="mt-6 pt-5 border-t border-slate-200/60 dark:border-white/5 flex flex-wrap items-center gap-2">
+                <span className="text-xs font-mono text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mr-2">
+                  <Languages className="w-3.5 h-3.5 text-cyan-400" />
+                  LANGUAGES:
+                </span>
+                {personalInfo.languages.map((lang) => (
+                  <span
+                    key={lang}
+                    className="px-2.5 py-0.5 text-xs font-mono rounded bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300"
+                  >
+                    {lang}
+                  </span>
+                ))}
               </div>
             </div>
 
@@ -86,7 +100,7 @@ export const About: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <BookOpen className="w-4 h-4 text-cyan-400" />
-                <span>B.E. Computer Science & Engg (Graduating 2026)</span>
+                <span>B.E. Computer Science & Engg ({educationData.graduated})</span>
               </div>
             </div>
           </div>
@@ -97,14 +111,14 @@ export const About: React.FC = () => {
             <div className="p-6 rounded-xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-md transition-all duration-300 hover:border-amber-500/40 dark:hover:border-cyan-400/40 relative group">
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 group-hover:scale-110 transition-transform">
-                  <Code className="w-6 h-6" />
+                  <BrainCircuit className="w-6 h-6" />
                 </div>
                 <div>
                   <h4 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight mb-1">
-                    Modern Web Development
+                    Data Science & Machine Learning
                   </h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                    Crafting reactive, mobile-first, and accessible interfaces using React, TypeScript, Tailwind CSS, and RESTful API integrations.
+                    End-to-end data preprocessing, predictive modeling (XGBoost/LightGBM/CatBoost), explainable AI with SHAP, statistics, NLP, and computer vision.
                   </p>
                 </div>
               </div>
@@ -114,14 +128,14 @@ export const About: React.FC = () => {
             <div className="p-6 rounded-xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-md transition-all duration-300 hover:border-cyan-400/40 relative group">
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 group-hover:scale-110 transition-transform">
-                  <BrainCircuit className="w-6 h-6" />
+                  <BarChart3 className="w-6 h-6" />
                 </div>
                 <div>
                   <h4 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight mb-1">
-                    AI & Intelligent Systems
+                    Visualization & BI Dashboards
                   </h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                    Building practical AI-infused tools leveraging Google Gemini API, OpenCV computer vision, and machine learning models for automated insights.
+                    Interactive Power BI dashboards, KPI tracking, executive reporting, SQL aggregations, and Matplotlib/Seaborn visualization.
                   </p>
                 </div>
               </div>
@@ -131,14 +145,14 @@ export const About: React.FC = () => {
             <div className="p-6 rounded-xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-md transition-all duration-300 hover:border-emerald-500/40 relative group">
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 group-hover:scale-110 transition-transform">
-                  <Rocket className="w-6 h-6" />
+                  <Code className="w-6 h-6" />
                 </div>
                 <div>
                   <h4 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight mb-1">
-                    Problem Solving & Clean Code
+                    Python & Full-Stack Development
                   </h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                    Deep foundation in data structures, relational DBMS, and clean modular code standards with continuous learning and curiosity.
+                    Crafting responsive web apps using React, TypeScript, Express, Streamlit, and integrating RESTful APIs including Google Gemini API.
                   </p>
                 </div>
               </div>

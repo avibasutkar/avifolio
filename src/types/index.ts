@@ -41,6 +41,14 @@ export interface ExperienceItem {
   technologies: string[];
 }
 
+export interface PreviousEducationItem {
+  degree: string;
+  institution: string;
+  location: string;
+  year: string;
+  score: string;
+}
+
 export interface EducationItem {
   degree: string;
   institution: string;
@@ -49,6 +57,7 @@ export interface EducationItem {
   cgpa: string;
   highlights: string[];
   coursework: string[];
+  previousEducation?: PreviousEducationItem[];
 }
 
 export interface CertificationItem {

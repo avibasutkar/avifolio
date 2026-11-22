@@ -49,7 +49,7 @@ export const Hero: React.FC = () => {
             <div className="mb-4">
               <TacticalBadge variant="amber" glow>
                 <Terminal className="w-3 h-3 text-amber-500" />
-                <span>Web Developer & AI Systems Engineer</span>
+                <span>Data Scientist & Python Developer</span>
               </TacticalBadge>
             </div>
 
@@ -60,14 +60,13 @@ export const Hero: React.FC = () => {
 
             {/* Professional Role */}
             <p className="text-lg sm:text-xl md:text-2xl font-mono text-slate-700 dark:text-slate-300 font-medium mb-5">
-              Computer Science Student <span className="text-amber-500">|</span> Aspiring Web Developer
+              Data Scientist <span className="text-amber-500">|</span> Data Analyst <span className="text-amber-500">|</span> Python Developer
             </p>
 
             {/* Engaging Introduction */}
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mb-8">
-              Engineering responsive, modern web applications and AI-driven platforms.
-              Bridging robust full-stack architecture with intelligent machine learning workflows
-              to craft digital experiences that are clean, fast, and purposeful.
+              Turning raw data into clear, usable insights and interfaces. Hands-on experience in data preprocessing,
+              SQL and Python-based analysis, interactive Power BI dashboards, and applied machine learning with full-stack interfaces.
             </p>
 
             {/* Action Buttons */}
@@ -179,11 +178,11 @@ export const Hero: React.FC = () => {
                 <div className="grid grid-cols-2 gap-2 pt-1 font-mono text-xs">
                   <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-200/70 dark:border-white/5">
                     <span className="text-[10px] text-slate-500 dark:text-slate-400 block uppercase">DEGREE // CGPA</span>
-                    <span className="font-bold text-slate-800 dark:text-white">8.1 / 10 CSE</span>
+                    <span className="font-bold text-slate-800 dark:text-white">8.02 / 10 CSE</span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-200/70 dark:border-white/5">
                     <span className="text-[10px] text-slate-500 dark:text-slate-400 block uppercase">SPECIALIZATION</span>
-                    <span className="font-bold text-slate-800 dark:text-white">Fullstack & AI</span>
+                    <span className="font-bold text-slate-800 dark:text-white">Data Science & AI</span>
                   </div>
                 </div>
 

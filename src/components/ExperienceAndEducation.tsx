@@ -172,7 +172,7 @@ export const ExperienceAndEducation: React.FC = () => {
               </div>
 
               {/* Coursework Grid */}
-              <div className="pt-6 border-t border-slate-200/60 dark:border-white/5">
+              <div className="pt-6 border-t border-slate-200/60 dark:border-white/5 mb-6">
                 <h4 className="text-xs font-mono uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-3">
                   Core Engineering Coursework:
                 </h4>
@@ -187,6 +187,40 @@ export const ExperienceAndEducation: React.FC = () => {
                   ))}
                 </div>
               </div>
+
+              {/* Previous Academic Milestones */}
+              {educationData.previousEducation && educationData.previousEducation.length > 0 && (
+                <div className="pt-6 border-t border-slate-200/60 dark:border-white/5">
+                  <h4 className="text-xs font-mono uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-4">
+                    Previous Academic Milestones:
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {educationData.previousEducation.map((prev, idx) => (
+                      <div
+                        key={idx}
+                        className="p-4 rounded-xl bg-slate-50/70 dark:bg-white/5 border border-slate-200/70 dark:border-white/5 flex flex-col justify-between"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between mb-1.5">
+                            <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400 uppercase font-semibold">
+                              YEAR: {prev.year}
+                            </span>
+                            <span className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400">
+                              {prev.score}
+                            </span>
+                          </div>
+                          <h5 className="text-sm font-bold text-slate-900 dark:text-white">
+                            {prev.degree}
+                          </h5>
+                          <p className="text-xs text-slate-600 dark:text-slate-400 font-mono mt-0.5">
+                            {prev.institution}, {prev.location}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}

@@ -61,7 +61,7 @@ export const Footer: React.FC = () => {
                 {personalInfo.name}
               </p>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Computer Science & Engineering Student
+                Data Scientist | Data Analyst | Python Developer
               </p>
             </div>
           </div>

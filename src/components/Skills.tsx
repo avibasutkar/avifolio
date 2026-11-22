@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Code2, Database, Wrench, Cpu, Check, Terminal } from 'lucide-react';
+import { Layout, Code2, Database, Wrench, Cpu, Check, Terminal, BarChart3 } from 'lucide-react';
 import { skillCategories } from '../data/portfolioData';
 import { SectionHeader, TacticalCornerBracket } from './TacticalUI';
 
@@ -18,6 +18,8 @@ export const Skills: React.FC = () => {
         return <Wrench className="w-5 h-5 text-purple-400" />;
       case 'Cpu':
         return <Cpu className="w-5 h-5 text-rose-400" />;
+      case 'BarChart3':
+        return <BarChart3 className="w-5 h-5 text-amber-400" />;
       default:
         return <Terminal className="w-5 h-5 text-amber-400" />;
     }
