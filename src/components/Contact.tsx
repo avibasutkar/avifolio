@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle2, Copy, Check, AlertCircle, Radio } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, Copy, Check, AlertCircle, Radio, ExternalLink } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { personalInfo } from '../data/portfolioData';
 import { SectionHeader, TacticalCornerBracket, TacticalBadge } from './TacticalUI';
-import { GithubIcon, LinkedinIcon } from './Icons';
+import { GithubIcon, LinkedinIcon, WhatsAppIcon } from './Icons';
 
 export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +16,10 @@ export const Contact: React.FC = () => {
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [lastWhatsAppUrl, setLastWhatsAppUrl] = useState<string>('');
+
+  const WHATSAPP_NUMBER = '917259999521';
+  const DISPLAY_PHONE = '+91 7259999521';
 
   const handleCopy = (text: string, fieldName: string) => {
     navigator.clipboard.writeText(text);
@@ -32,7 +36,7 @@ export const Contact: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validation
@@ -42,25 +46,41 @@ export const Contact: React.FC = () => {
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email.trim())) {
-      setFormStatus('error');
-      setErrorMessage('Please enter a valid email address.');
-      return;
+    if (formData.email.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email.trim())) {
+        setFormStatus('error');
+        setErrorMessage('Please enter a valid email address.');
+        return;
+      }
     }
 
-    if (!formData.message.trim() || formData.message.trim().length < 10) {
+    if (!formData.message.trim() || formData.message.trim().length < 5) {
       setFormStatus('error');
-      setErrorMessage('Message must be at least 10 characters long.');
+      setErrorMessage('Message must be at least 5 characters long.');
       return;
     }
 
     setFormStatus('submitting');
 
-    // Simulate reliable dispatch
+    // Build structured WhatsApp message
+    const formattedMessage = `👋 Hi Avinash,
+
+*Name:* ${formData.name.trim()}
+*Email:* ${formData.email.trim() || 'Not specified'}
+*Subject:* ${formData.subject.trim() || 'Portfolio Inquiry'}
+
+*Message:*
+${formData.message.trim()}`;
+
+    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(formattedMessage)}`;
+    setLastWhatsAppUrl(waUrl);
+
     setTimeout(() => {
       setFormStatus('success');
-      setFormData({ name: '', email: '', subject: '', message: '' });
+
+      // Open WhatsApp chat in a new tab
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
 
       // Trigger celebration confetti
       try {
@@ -68,12 +88,12 @@ export const Contact: React.FC = () => {
           particleCount: 80,
           spread: 60,
           origin: { y: 0.8 },
-          colors: ['#f59e0b', '#06b6d4', '#10b981'],
+          colors: ['#22c55e', '#06b6d4', '#f59e0b'],
         });
       } catch (err) {
         // Silently ignore if canvas not supported
       }
-    }, 1200);
+    }, 600);
   };
 
   return (
@@ -103,11 +123,53 @@ export const Contact: React.FC = () => {
                 Let's Build Something Great Together
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
-                I am actively seeking software engineering internships, frontend developer roles, and collaborative projects. Feel free to reach out directly via email or connect on LinkedIn.
+                I am actively seeking Data Scientist, Data Analyst, and Python Developer roles. Feel free to reach out directly via WhatsApp, email, or LinkedIn.
               </p>
 
               {/* Direct Info Cards */}
               <div className="space-y-3 font-mono text-xs">
+                {/* WhatsApp & Phone Item */}
+                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-between gap-3 group">
+                  <div className="flex items-center gap-3 overflow-hidden">
+                    <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shrink-0">
+                      <WhatsAppIcon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-400 block uppercase">WHATSAPP / PHONE</span>
+                      <a
+                        href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-slate-800 dark:text-slate-200 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors font-sans text-sm font-semibold flex items-center gap-1.5"
+                      >
+                        <span>{DISPLAY_PHONE}</span>
+                        <ExternalLink className="w-3 h-3 text-emerald-500" />
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1">
+                    <a
+                      href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+                      title="Open WhatsApp Chat directly"
+                      aria-label="Open WhatsApp chat directly"
+                    >
+                      <WhatsAppIcon className="w-4 h-4" />
+                    </a>
+                    <button
+                      onClick={() => handleCopy(DISPLAY_PHONE, 'phone')}
+                      className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:text-cyan-400 transition-colors shrink-0"
+                      title="Copy Phone Number"
+                      aria-label="Copy phone number"
+                    >
+                      {copiedField === 'phone' ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+
                 {/* Email Item */}
                 <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-between gap-3 group">
                   <div className="flex items-center gap-3 overflow-hidden">
@@ -135,36 +197,9 @@ export const Contact: React.FC = () => {
                   </button>
                 </div>
 
-                {/* Phone Item */}
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-between gap-3 group">
-                  <div className="flex items-center gap-3 overflow-hidden">
-                    <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-500 shrink-0">
-                      <Phone className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-slate-400 block uppercase">PHONE / WHATSAPP</span>
-                      <a
-                        href={`tel:${personalInfo.phone.replace(/\s+/g, '')}`}
-                        className="text-slate-800 dark:text-slate-200 hover:text-cyan-400 transition-colors font-sans text-sm font-medium"
-                      >
-                        {personalInfo.phone}
-                      </a>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => handleCopy(personalInfo.phone, 'phone')}
-                    className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:text-cyan-400 transition-colors shrink-0"
-                    title="Copy Phone Number"
-                    aria-label="Copy phone number"
-                  >
-                    {copiedField === 'phone' ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-                  </button>
-                </div>
-
                 {/* Location Item */}
                 <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500 shrink-0">
+                  <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-500 shrink-0">
                     <MapPin className="w-4 h-4" />
                   </div>
                   <div>
@@ -205,7 +240,7 @@ export const Contact: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Accessible Contact Form */}
+          {/* Right Column: Accessible Contact Form with WhatsApp Redirect */}
           <div className="lg:col-span-7">
             <div className="p-6 sm:p-8 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/10 backdrop-blur-md relative">
               <TacticalCornerBracket position="tl" />
@@ -213,35 +248,67 @@ export const Contact: React.FC = () => {
               <TacticalCornerBracket position="bl" />
               <TacticalCornerBracket position="br" />
 
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                 <div>
                   <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 dark:text-slate-400 block">
-                    TRANSMISSION_INPUT // V2
+                    TRANSMISSION_INPUT // WHATSAPP DIRECT
                   </span>
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                     Send a Direct Message
                   </h3>
                 </div>
-                <TacticalBadge variant="cyan">ENCRYPTED // TLS</TacticalBadge>
+                <TacticalBadge variant="green" glow>
+                  <WhatsAppIcon className="w-3 h-3" />
+                  <span>WHATSAPP // {DISPLAY_PHONE}</span>
+                </TacticalBadge>
+              </div>
+
+              {/* Quick WhatsApp helper note */}
+              <div className="mb-6 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs font-mono text-emerald-800 dark:text-emerald-300 flex flex-wrap items-center justify-between gap-2">
+                <span>Direct dispatch routed to WhatsApp (+91 7259999521).</span>
+                <a
+                  href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold underline hover:text-emerald-600 dark:hover:text-emerald-200 inline-flex items-center gap-1"
+                >
+                  <span>Quick Chat</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
               </div>
 
               {formStatus === 'success' ? (
                 <div className="p-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-center animate-fade-in">
                   <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle2 className="w-6 h-6" />
+                    <WhatsAppIcon className="w-6 h-6" />
                   </div>
                   <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
-                    Message Dispatched Successfully!
+                    Redirecting to WhatsApp...
                   </h4>
                   <p className="text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto mb-6 leading-relaxed">
-                    Thank you for reaching out. Your transmission has been recorded, and I will get back to you as soon as possible.
+                    Your transmission has been formatted and redirected to WhatsApp for <strong>{DISPLAY_PHONE}</strong>. If WhatsApp did not open automatically, click below:
                   </p>
-                  <button
-                    onClick={() => setFormStatus('idle')}
-                    className="px-5 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold"
-                  >
-                    Send Another Message
-                  </button>
+                  <div className="flex flex-wrap items-center justify-center gap-3">
+                    <a
+                      href={lastWhatsAppUrl || `https://wa.me/${WHATSAPP_NUMBER}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all shadow-md"
+                    >
+                      <WhatsAppIcon className="w-4 h-4" />
+                      <span>Open WhatsApp</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                    <button
+                      onClick={() => {
+                        setFormStatus('idle');
+                        setFormData({ name: '', email: '', subject: '', message: '' });
+                      }}
+                      className="px-5 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold"
+                    >
+                      Send Another Message
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -266,24 +333,23 @@ export const Contact: React.FC = () => {
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder="e.g. Alex Morgan"
-                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-white dark:bg-slate-800/80 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500 dark:focus:border-cyan-400 transition-colors"
+                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-white dark:bg-slate-800/80 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 transition-colors"
                       />
                     </div>
 
                     {/* Email Input */}
                     <div>
                       <label htmlFor="email" className="block text-xs font-mono text-slate-600 dark:text-slate-400 mb-1.5 uppercase">
-                        Email Address *
+                        Email Address (Optional)
                       </label>
                       <input
                         type="email"
                         id="email"
                         name="email"
-                        required
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="alex@domain.com"
-                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-white dark:bg-slate-800/80 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500 dark:focus:border-cyan-400 transition-colors"
+                        className="w-full px-4 py-2.5 rounded-lg text-sm bg-white dark:bg-slate-800/80 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 transition-colors"
                       />
                     </div>
                   </div>
@@ -299,8 +365,8 @@ export const Contact: React.FC = () => {
                       name="subject"
                       value={formData.subject}
                       onChange={handleInputChange}
-                      placeholder="e.g. Internship Opportunity / Project Collaboration"
-                      className="w-full px-4 py-2.5 rounded-lg text-sm bg-white dark:bg-slate-800/80 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500 dark:focus:border-cyan-400 transition-colors"
+                      placeholder="e.g. Job Opportunity / Project Collaboration"
+                      className="w-full px-4 py-2.5 rounded-lg text-sm bg-white dark:bg-slate-800/80 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 transition-colors"
                     />
                   </div>
 
@@ -317,7 +383,7 @@ export const Contact: React.FC = () => {
                       value={formData.message}
                       onChange={handleInputChange}
                       placeholder="Write your message here..."
-                      className="w-full px-4 py-2.5 rounded-lg text-sm bg-white dark:bg-slate-800/80 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500 dark:focus:border-cyan-400 transition-colors resize-none"
+                      className="w-full px-4 py-2.5 rounded-lg text-sm bg-white dark:bg-slate-800/80 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 transition-colors resize-none"
                     />
                   </div>
 
@@ -326,17 +392,17 @@ export const Contact: React.FC = () => {
                     <button
                       type="submit"
                       disabled={formStatus === 'submitting'}
-                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-xs font-mono uppercase tracking-wider font-bold bg-slate-900 text-white hover:bg-slate-800 dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-slate-950 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                      className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-lg text-xs font-mono uppercase tracking-wider font-bold bg-emerald-600 hover:bg-emerald-500 text-white dark:bg-emerald-500 dark:hover:bg-emerald-400 dark:text-slate-950 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-emerald-500/25 active:scale-[0.99]"
                     >
                       {formStatus === 'submitting' ? (
                         <>
                           <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                          <span>ENCRYPTING & DISPATCHING...</span>
+                          <span>PREPARING WHATSAPP DISPATCH...</span>
                         </>
                       ) : (
                         <>
-                          <Send className="w-4 h-4" />
-                          <span>TRANSMIT MESSAGE</span>
+                          <WhatsAppIcon className="w-4 h-4" />
+                          <span>SEND VIA WHATSAPP ({DISPLAY_PHONE})</span>
                         </>
                       )}
                     </button>
